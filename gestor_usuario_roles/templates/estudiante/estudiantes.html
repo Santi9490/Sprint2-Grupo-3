@@ -1,0 +1,6 @@
+<h1>Lista de Estudiantes</h1>
+<ul>
+  {% for estudiante in estudiante_list %}
+    <li>{{ estudiante.nombre }} {{ estudiante.apellido }} - Código: {{ estudiante.codigo }}</li>
+  {% endfor %}
+</ul>
