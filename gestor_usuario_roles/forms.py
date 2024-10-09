@@ -8,6 +8,7 @@ class EstudianteForm(forms.ModelForm):
             'nombre',
             'apellido',
             'codigo',
+            'fecha_nacimiento',
             'numero_acudiente',
             'direccion',
         ]
@@ -15,6 +16,7 @@ class EstudianteForm(forms.ModelForm):
             'nombre': 'Nombre',
             'apellido': 'Apellido',
             'codigo': 'Código',
+            'fecha_nacimiento': 'Fecha de Nacimiento',
             'numero_acudiente': 'Número del Acudiente',
             'direccion': 'Dirección',
         }
