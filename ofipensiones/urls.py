@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('', include('gestor_usuario_roles.urls')),
+    path('', include('gestor_colegios.urls')),
     path('health-check/', views.health_check),
 
 ]
