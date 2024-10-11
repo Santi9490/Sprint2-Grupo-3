@@ -10,9 +10,8 @@ from concurrent.futures import ThreadPoolExecutor
 def estudiante_list(request):
     estudiantes = []
 
-    # Usamos ThreadPoolExecutor para manejar las solicitudes en paralelo
+
     with ThreadPoolExecutor(max_workers=175) as executor:
-        # Obtenemos todos los estudiantes en threads
         futures = [executor.submit(Estudiante.objects.get, id=est.id) for est in Estudiante.objects.all()]
         for future in futures:
             try:
