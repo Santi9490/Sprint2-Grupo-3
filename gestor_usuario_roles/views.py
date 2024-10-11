@@ -4,10 +4,22 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .forms import EstudianteForm
 from .models import Estudiante
+from concurrent.futures import ThreadPoolExecutor
 
 # Función para listar estudiantes
 def estudiante_list(request):
-    estudiantes = Estudiante.objects.all()
+    estudiantes = []
+
+    # Usamos ThreadPoolExecutor para manejar las solicitudes en paralelo
+    with ThreadPoolExecutor(max_workers=175) as executor:
+        # Obtenemos todos los estudiantes en threads
+        futures = [executor.submit(Estudiante.objects.get, id=est.id) for est in Estudiante.objects.all()]
+        for future in futures:
+            try:
+                estudiantes.append(future.result())
+            except Exception as e:
+                print(f"Error obteniendo estudiante: {e}")
+
     context = {
         'estudiante_list': estudiantes
     }
@@ -18,7 +30,7 @@ def estudiante_create(request):
     if request.method == 'POST':
         form = EstudianteForm(request.POST)
         if form.is_valid():
-            form.save() 
+            form.save()
             messages.add_message(request, messages.SUCCESS, 'Estudiante creado exitosamente')
             return HttpResponseRedirect(reverse('estudianteCreate'))
         else:
@@ -30,5 +42,6 @@ def estudiante_create(request):
         'form': form,
     }
     return render(request, 'estudiante/estudianteCreate.html', context)
+
 
 
