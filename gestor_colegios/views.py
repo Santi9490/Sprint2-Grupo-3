@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -18,7 +19,10 @@ def colegio_create(request):
     if request.method == 'POST':
         form = ColegioForm(request.POST)
         if form.is_valid():
-            form.save() 
+            with ThreadPoolExecutor(max_workers=56) as executor:
+                future = executor.submit(form.save)
+                future.result()
+
             messages.add_message(request, messages.SUCCESS, 'Colegio creado exitosamente')
             return HttpResponseRedirect(reverse('colegioCreate'))
         else:
