@@ -15,13 +15,14 @@ def colegio_list(request):
     return render(request, 'colegio/colegios.html', context)
 
 # Función para crear un nuevo colegio
+
+executor = ThreadPoolExecutor(max_workers=56)
 def colegio_create(request):
     if request.method == 'POST':
         form = ColegioForm(request.POST)
         if form.is_valid():
-            with ThreadPoolExecutor(max_workers=56) as executor:
-                future = executor.submit(form.save)
-                future.result()
+            future = executor.submit(form.save)
+            future.result()
 
             return HttpResponseRedirect(reverse('colegioCreate'))
         else:
