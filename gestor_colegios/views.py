@@ -23,7 +23,6 @@ def colegio_create(request):
                 future = executor.submit(form.save)
                 future.result()
 
-            messages.add_message(request, messages.SUCCESS, 'Colegio creado exitosamente')
             return HttpResponseRedirect(reverse('colegioCreate'))
         else:
             print(form.errors)
