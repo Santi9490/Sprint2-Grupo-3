@@ -1,0 +1,16 @@
+<!-- estudiante/estados_cuenta.html -->
+<h1>Lista de Estados de Cuenta</h1>
+<table>
+    <tr>
+        <th>Estudiante</th>
+        <th>Saldo</th>
+        <th>Fecha de Actualización</th>
+    </tr>
+    {% for estado in estado_cuenta_list %}
+    <tr>
+        <td>{{ estado.estudiante.nombre }} {{ estado.estudiante.apellido }}</td>
+        <td>{{ estado.saldo }}</td>
+        <td>{{ estado.fecha_actualizacion }}</td>
+    </tr>
+    {% endfor %}
+</table>

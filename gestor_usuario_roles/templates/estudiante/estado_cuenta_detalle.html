@@ -1,0 +1,24 @@
+<!-- estudiante/estado_cuenta_detalle.html -->
+<h1>Estado de Cuenta de {{ estudiante.nombre }} {{ estudiante.apellido }}</h1>
+
+<p><strong>Código:</strong> {{ estudiante.codigo }}</p>
+<p><strong>Dirección:</strong> {{ estudiante.direccion }}</p>
+<p><strong>Número del Acudiente:</strong> {{ estudiante.numero_acudiente }}</p>
+
+<h2>Historial de Estado de Cuenta</h2>
+<table>
+    <tr>
+        <th>Saldo</th>
+        <th>Fecha de Actualización</th>
+    </tr>
+    {% for estado in estados_cuenta %}
+    <tr>
+        <td>{{ estado.saldo }}</td>
+        <td>{{ estado.fecha_actualizacion }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">No hay registros de estado de cuenta para este estudiante.</td>
+    </tr>
+    {% endfor %}
+</table>

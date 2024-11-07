@@ -1,0 +1,7 @@
+<!-- estudiante/estadoCuentaCreate.html -->
+<h1>Agregar Estado de Cuenta</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+</form>

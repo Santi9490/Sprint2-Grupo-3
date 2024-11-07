@@ -1,19 +1,10 @@
-from django.shortcuts import render
+import json
+from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from .forms import EstudianteForm
-from .models import Estudiante
-from concurrent.futures import ThreadPoolExecutor
-
-# Función para listar estudiantes
-def estudiante_list(request):
-    from django.shortcuts import render
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from .forms import EstudianteForm
-from .models import Estudiante
+from .forms import EstadoCuentaForm, EstudianteForm
+from .models import EstadoCuenta, Estudiante
 
 # Función para listar estudiantes
 def estudiante_list(request):
@@ -41,5 +32,40 @@ def estudiante_create(request):
     }
     return render(request, 'estudiante/estudianteCreate.html', context)
 
+
+def estado_cuenta_list(request):
+    estados_cuenta = EstadoCuenta.objects.select_related('estudiante').all()
+    context = {
+        'estado_cuenta_list': estados_cuenta
+    }
+    return render(request, 'estudiante/estados_cuenta.html', context)
+
+# Función para crear un nuevo estado de cuenta
+def estado_cuenta_create(request):
+    if request.method == 'POST':
+        form = EstadoCuentaForm(request.POST)
+        if form.is_valid():
+            form.save() 
+            messages.add_message(request, messages.SUCCESS, 'Estado de cuenta creado exitosamente')
+            return HttpResponseRedirect(reverse('estadoCuentaCreate'))
+        else:
+            print(form.errors)
+    else:
+        form = EstadoCuentaForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'estudiante/estadoCuentaCreate.html', context)
+
+# Función para ver el estado de cuenta de un solo estudiante
+def estado_cuenta_detalle(request, codigo):
+    estudiante = get_object_or_404(Estudiante, codigo=codigo)
+    estados_cuenta = EstadoCuenta.objects.filter(estudiante=estudiante)
+    context = {
+        'estudiante': estudiante,
+        'estados_cuenta': estados_cuenta
+    }
+    return render(request, 'estudiante/estado_cuenta_detalle.html', context)
 
 
