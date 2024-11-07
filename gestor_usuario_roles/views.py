@@ -58,7 +58,7 @@ def estado_cuenta_create(request):
     }
     return render(request, 'estudiante/estadoCuentaCreate.html', context)
 
-# Función para ver el estado de cuenta de un solo estudiante
+# Función para ver el estado de cuenta de un solo estudiante con todos sus registros
 def estado_cuenta_detalle(request, codigo):
     estudiante = get_object_or_404(Estudiante, codigo=codigo)
     estados_cuenta = EstadoCuenta.objects.filter(estudiante=estudiante)

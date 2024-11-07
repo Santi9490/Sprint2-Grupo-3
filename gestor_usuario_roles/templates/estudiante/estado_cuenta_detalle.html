@@ -8,17 +8,28 @@
 <h2>Historial de Estado de Cuenta</h2>
 <table>
     <tr>
-        <th>Saldo</th>
+        <th>Fecha de Pago</th>
+        <th>Descripción</th>
+        <th>Monto Pagado</th>
+        <th>Saldo Pendiente</th>
+        <th>Multa</th>
+        <th>Fecha de Vencimiento</th>
         <th>Fecha de Actualización</th>
     </tr>
     {% for estado in estados_cuenta %}
     <tr>
-        <td>{{ estado.saldo }}</td>
+        <td>{{ estado.fecha_pago }}</td>
+        <td>{{ estado.descripcion }}</td>
+        <td>{{ estado.monto_pagado }}</td>
+        <td>{{ estado.saldo_pendiente }}</td>
+        <td>{{ estado.multa }}</td>
+        <td>{{ estado.fecha_vencimiento }}</td>
         <td>{{ estado.fecha_actualizacion }}</td>
     </tr>
     {% empty %}
     <tr>
-        <td colspan="2">No hay registros de estado de cuenta para este estudiante.</td>
+        <td colspan="7">No hay registros de estado de cuenta para este estudiante.</td>
     </tr>
     {% endfor %}
 </table>
+
