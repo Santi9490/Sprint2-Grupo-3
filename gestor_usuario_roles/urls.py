@@ -8,5 +8,6 @@ urlpatterns = [
     path('estados-cuenta/', views.estado_cuenta_list, name='estadoCuentaList'),
     path('estado-cuenta/create/', views.estado_cuenta_create, name='estadoCuentaCreate'),
     path('estado-cuenta/<str:codigo>/', views.estado_cuenta_detalle, name='estadoCuentaDetalle'),
+    path('health/', views.health_check, name='health_check'),  # Health Check
 ]
 

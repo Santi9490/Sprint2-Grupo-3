@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from .forms import EstadoCuentaForm, EstudianteForm
 from .models import EstadoCuenta, Estudiante
@@ -67,5 +67,15 @@ def estado_cuenta_detalle(request, codigo):
         'estados_cuenta': estados_cuenta
     }
     return render(request, 'estudiante/estado_cuenta_detalle.html', context)
+
+def health_check(request):
+    try:
+        # Realiza una consulta básica a la base de datos
+        Estudiante.objects.first()
+        EstadoCuenta.objects.first()
+        return HttpResponse('ok')
+    except Exception as e:
+        # Si ocurre algún error, responde con un mensaje de error
+        return HttpResponse('error')
 
 
