@@ -67,13 +67,39 @@ def estado_cuenta_detalle(request, codigo):
     }
     return render(request, 'estudiante/estado_cuenta_detalle.html', context)
 
+from django.http import JsonResponse
+from .models import Estudiante, EstadoCuenta
+
 def health_check(request):
+    db_status = 'ok'
+    recibo_status = 'ok'
+    estado_cuenta_status = 'ok'
+    
+    # Verifica conexión a la base de datos
     try:
-        Estudiante.objects.first()  # Verifica conexión a la base de datos
-        db_status = 'ok'
+        Estudiante.objects.first()
     except Exception as e:
         db_status = 'error'
 
-    return JsonResponse({'db_status': db_status, 'app_status': 'ok' if db_status == 'ok' else 'error'})
+    try:
+        
+        EstadoCuenta.objects.filter(descripcion='Recibo de prueba').first()
+    except Exception as e:
+        recibo_status = 'error'
+
+    # Simulación de verificación de consulta de estado de cuenta
+    try:
+        EstadoCuenta.objects.filter(estudiante__codigo='0000').first()
+    except Exception as e:
+        estado_cuenta_status = 'error'
+
+    # Devolver un JSON con el estado de cada servicio
+    return JsonResponse({
+        'db_status': db_status,
+        'recibo_status': recibo_status,
+        'estado_cuenta_status': estado_cuenta_status,
+        'app_status': 'ok' if all(status == 'ok' for status in [db_status, recibo_status, estado_cuenta_status]) else 'error'
+    })
+
 
 
