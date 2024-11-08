@@ -6,7 +6,6 @@ class CuentaForm(forms.ModelForm):
         model = Cuenta
         fields = [
             'estudiante',
-            'codigo',
             'fecha_pago',
             'descripcion',
             'pas_y_salvo',
@@ -17,7 +16,6 @@ class CuentaForm(forms.ModelForm):
         ]
         labels = {
             'estudiante': 'Estudiante',
-            'codigo': 'Código',
             'fecha_pago': 'Fecha de Pago',
             'descripcion': 'Descripción',
             'pas_y_salvo': 'Pas y Salvo',

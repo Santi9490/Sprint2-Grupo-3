@@ -4,7 +4,6 @@ from gestor_usuario_roles.models import Estudiante
 
 class Cuenta(models.Model):
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, default=None)
-    codigo = models.ForeignKey(Estudiante.codigo, on_delete=models.CASCADE, default=None)
     fecha_pago = models.DateField(null=True, blank=True)
     descripcion = models.CharField(max_length=255)
     pas_y_salvo = models.BooleanField(default=False)
