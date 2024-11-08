@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gestor_usuario_roles',
     'gestor_colegios',
-    'pagos',
 ]
 
 MIDDLEWARE = [
