@@ -1,4 +1,3 @@
-import json
 from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -70,12 +69,11 @@ def estado_cuenta_detalle(request, codigo):
 
 def health_check(request):
     try:
-        # Realiza una consulta básica a la base de datos
-        Estudiante.objects.first()
-        EstadoCuenta.objects.first()
-        return HttpResponse('ok')
+        Estudiante.objects.first()  # Verifica conexión a la base de datos
+        db_status = 'ok'
     except Exception as e:
-        # Si ocurre algún error, responde con un mensaje de error
-        return HttpResponse('error')
+        db_status = 'error'
+
+    return JsonResponse({'db_status': db_status, 'app_status': 'ok' if db_status == 'ok' else 'error'})
 
 
