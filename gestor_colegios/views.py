@@ -2,10 +2,10 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 from django.shortcuts import render
 from django.contrib import messages
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from gestor_usuario_roles.models import EstadoCuenta, Estudiante
+from gestor_usuario_roles.models import Estudiante
 from .forms import ColegioForm
 from .models import Colegio
 
