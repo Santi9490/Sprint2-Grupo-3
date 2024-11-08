@@ -1,11 +1,11 @@
 <!-- estudiante/estado_cuenta_detalle.html -->
-<h1>Estado de Cuenta de {{ estudiante.nombre }} {{ estudiante.apellido }}</h1>
+<h1>Cuenta de {{ estudiante.nombre }} {{ estudiante.apellido }}</h1>
 
 <p><strong>Código:</strong> {{ estudiante.codigo }}</p>
 <p><strong>Dirección:</strong> {{ estudiante.direccion }}</p>
 <p><strong>Número del Acudiente:</strong> {{ estudiante.numero_acudiente }}</p>
 
-<h2>Historial de Estado de Cuenta</h2>
+<h2>Historial de Cuenta</h2>
 <table>
     <tr>
         <th>Fecha de Pago</th>
@@ -16,7 +16,7 @@
         <th>Fecha de Vencimiento</th>
         <th>Fecha de Actualización</th>
     </tr>
-    {% for estado in estados_cuenta %}
+    {% for estado in cuentas %}
     <tr>
         <td>{{ estado.fecha_pago }}</td>
         <td>{{ estado.descripcion }}</td>
