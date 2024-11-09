@@ -13,7 +13,6 @@ def create_alarm(estudiante, cuenta, limitExceeded):
     alarm = Alarm()
     alarm.estudiante = estudiante
     alarm.cuenta = cuenta
-    alarm.pas_y_salvo = cuenta.pas_y_salvo
     alarm.limitExceeded = limitExceeded
     alarm.save()
     return alarm
