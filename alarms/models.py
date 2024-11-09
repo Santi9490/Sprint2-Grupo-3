@@ -14,8 +14,8 @@ class Alarm(models.Model):
     def toJson(self):
         alarm = {
             'id': self.id,
-            'estudiante': self.estudiante,
-            'cuenta': self.cuenta,
+            'estudiante': self.estudiante.nombre,
+            'cuenta': self.cuenta.pas_y_salvo,
             'dateTime': self.dateTime,
             'limitExceeded': self.limitExceeded
         }
