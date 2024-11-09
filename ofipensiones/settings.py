@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'gestor_usuario_roles',
     'gestor_colegios',
     'cuenta',
+    'alarms',
 ]
 
 MIDDLEWARE = [
