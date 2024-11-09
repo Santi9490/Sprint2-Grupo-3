@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
 
 from gestor_usuario_roles.logic.estudiante_logic import get_estudiante_by_id
 from .logic.logic_alarm import get_alarms, get_cuentas_by_estudiante, create_alarm
