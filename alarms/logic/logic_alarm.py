@@ -6,8 +6,9 @@ def get_alarms():
     return (queryset)
 
 def get_cuentas_by_estudiante(estudiante):
-    queryset = Cuenta.objects.filter(estudiante=estudiante).order_by('-dateTime')[:10]
-    return (queryset)
+    queryset = Cuenta.objects.filter(estudiante=estudiante).order_by('-fecha_actualizacion')[:10]
+    return queryset
+
 
 def create_alarm(estudiante, cuenta, limitExceeded):
     alarm = Alarm()
