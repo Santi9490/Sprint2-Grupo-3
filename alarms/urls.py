@@ -5,5 +5,5 @@ from . import views
 
 urlpatterns = [
     path('alarms/', views.alarm_list),
-    path('alarmsValidate/<int:variable_id>', views.generate_alarm),
+    path('alarmsValidate/<int:estudiante_id>', views.generate_alarm),
 ]
