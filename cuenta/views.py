@@ -21,7 +21,7 @@ def cuenta_create(request):
         if form.is_valid():
             form.save() 
             messages.add_message(request, messages.SUCCESS, 'Estado de cuenta creado exitosamente')
-            return HttpResponseRedirect(reverse('cuentaCreate'))
+            return HttpResponseRedirect(reverse('cuenta_create'))
         else:
             print(form.errors)
     else:
