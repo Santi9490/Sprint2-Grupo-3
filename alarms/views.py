@@ -9,6 +9,7 @@ def alarm_list(request):
     context = list(alarms.values())
     return JsonResponse(context, safe=False)
 
+@csrf_exempt
 def generate_alarm(request, estudiante_id):
     estudiante = get_estudiante_by_id(estudiante_id)
     cuentas = get_cuentas_by_estudiante(estudiante_id)
