@@ -44,8 +44,8 @@ def pago_list(request, id=None):
     if role in ["Rector", "Coordinador", "Secretaria"]:
         if id:
             pagos = Pago.objects.filter(id=id)
-
-            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago WHERE id = %s", [id]) %s es el que evita la inyeccion de sql
+            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago WHERE id = %s", [id]) %s y la "," es el que evita la inyeccion de sql
+            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago WHERE id = %s" %id) aqui si se puede hacer inyeccion de sql
         else:
             pagos = Pago.objects.all() 
 
