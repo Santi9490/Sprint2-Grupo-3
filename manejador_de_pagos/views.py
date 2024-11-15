@@ -44,8 +44,12 @@ def pago_list(request, id=None):
     if role in ["Rector", "Coordinador", "Secretaria"]:
         if id:
             pagos = Pago.objects.filter(id=id)
+
+            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago WHERE id = %s", [id])
         else:
             pagos = Pago.objects.all() 
+
+            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago")
 
         return render(request, 'manejador_de_pagos/pago_list.html', {'pagos': pagos})
     else:
