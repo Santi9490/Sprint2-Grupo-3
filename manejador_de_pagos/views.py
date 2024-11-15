@@ -19,7 +19,7 @@ def pago_create(request):
             codigo_form = CodigoEstudianteForm(request.POST)
             if codigo_form.is_valid():
                 codigo = codigo_form.cleaned_data["codigo"]
-                estudiante = get_object_or_404(Estudiante, codigo=codigo)
+                estudiante = get_estudiante_by_id(codigo)
                 # Cargar el formulario de pago con el estudiante encontrado
                 form = PagoForm(estudiante=estudiante)
             else:
@@ -27,7 +27,7 @@ def pago_create(request):
         elif request.method == "POST":
             # Segunda etapa: Procesar el pago
             codigo = request.POST.get("codigo")
-            estudiante = get_object_or_404(Estudiante, codigo=codigo)
+            estudiante = get_estudiante_by_id(codigo)
             form = PagoForm(request.POST, estudiante=estudiante)
             if form.is_valid():
                 cuenta = form.cleaned_data['cuenta']
