@@ -1,6 +1,5 @@
-{% extends "base.html" %}
-
-{% block content %}
+<h1>Lista de Pagos</h1>
+<ul>
   <h2>Listado de Pagos{% if estudiante %} para {{ estudiante.nombre }} {{ estudiante.apellido }}{% endif %}</h2>
   
   <table class="table">
@@ -29,5 +28,5 @@
       {% endfor %}
     </tbody>
   </table>
-{% endblock %}
+</ul>
 
