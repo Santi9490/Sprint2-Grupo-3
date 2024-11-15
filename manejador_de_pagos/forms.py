@@ -4,12 +4,12 @@ from .models import Pago
 from cuenta.models import Cuenta
 
 class PagoForm(forms.ModelForm):
-    cuenta = forms.ModelChoiceField(queryset=Cuenta.objects.none(), label="Cuenta")
 
     class Meta:
         model = Pago
-        fields = ['cuenta', 'monto', 'descripcion']
+        fields = ['estudiante','cuenta', 'monto', 'descripcion']
         labels = {
+            'estudiante': 'Estudiante',
             'monto': 'Monto del pago',
             'descripcion': 'Descripción'
         }

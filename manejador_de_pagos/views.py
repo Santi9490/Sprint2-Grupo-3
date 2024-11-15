@@ -14,21 +14,8 @@ from ofipensiones.auth0backend import getRole
 def pago_create(request):
     role = getRole(request)
     if role == "Rector" or role == "Coordinador":      
-    # Primera etapa: Pedir el código del estudiante
-        if request.method == "POST" and "codigo" in request.POST:
-            codigo_form = CodigoEstudianteForm(request.POST)
-            if codigo_form.is_valid():
-                codigo = codigo_form.cleaned_data["codigo"]
-                estudiante = get_estudiante_by_id(codigo)
-                # Cargar el formulario de pago con el estudiante encontrado
-                form = PagoForm(estudiante=estudiante)
-            else:
-                form = None
-        elif request.method == "POST":
-            # Segunda etapa: Procesar el pago
-            codigo = request.POST.get("codigo")
-            estudiante = get_estudiante_by_id(codigo)
-            form = PagoForm(request.POST, estudiante=estudiante)
+        if request.method == "POST":
+            form = PagoForm(request.POST)
             if form.is_valid():
                 cuenta = form.cleaned_data['cuenta']
                 pago = form.save(commit=False)
