@@ -42,36 +42,12 @@ def pago_create(request):
 def pago_list(request, codigo=None):
     role = getRole(request)
     if role in ["Rector", "Coordinador", "Secretaria"]:
-        estudiante = None
-        pagos = Pago.objects.all()
+        if id:
+            pagos = Pago.objects.filter(id=id)
+        else:
+            pagos = Pago.objects.all() 
 
-        if codigo:
-            estudiante = get_object_or_404(Estudiante, codigo=codigo)
-            pagos = pagos.filter(estudiante=estudiante)
-
-        fecha_inicio = request.GET.get("fecha_inicio")
-        fecha_fin = request.GET.get("fecha_fin")
-        monto_min = request.GET.get("monto_min")
-        monto_max = request.GET.get("monto_max")
-
-        if fecha_inicio and fecha_fin:
-            pagos = pagos.filter(fecha_pago__range=[fecha_inicio, fecha_fin])
-        if monto_min:
-            pagos = pagos.filter(monto__gte=monto_min)
-        if monto_max:
-            pagos = pagos.filter(monto__lte=monto_max)
-
-        context = {
-            'pagos': pagos,
-            'estudiante': estudiante,
-            'filtros': {
-                'fecha_inicio': fecha_inicio,
-                'fecha_fin': fecha_fin,
-                'monto_min': monto_min,
-                'monto_max': monto_max,
-            },
-        }
-        return render(request, 'manejador_de_pagos/pago_list.html', context)
+        return render(request, 'manejador_de_pagos/pago_list.html', {'pagos': pagos})
     else:
         return HttpResponse("Unauthorized User")
 

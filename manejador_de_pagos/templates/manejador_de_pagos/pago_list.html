@@ -1,32 +1,9 @@
 <h1>Lista de Pagos</h1>
 
-<h2>Listado de Pagos{% if estudiante %} para {{ estudiante.nombre }} {{ estudiante.apellido }}{% endif %}</h2>
-
-<!-- Formulario de Filtros -->
-<form method="get" action="">
-    <div>
-        <label for="fecha_inicio">Fecha Inicio:</label>
-        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ filtros.fecha_inicio }}">
-    </div>
-    <div>
-        <label for="fecha_fin">Fecha Fin:</label>
-        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ filtros.fecha_fin }}">
-    </div>
-    <div>
-        <label for="monto_min">Monto Mínimo:</label>
-        <input type="number" id="monto_min" name="monto_min" step="0.01" value="{{ filtros.monto_min }}">
-    </div>
-    <div>
-        <label for="monto_max">Monto Máximo:</label>
-        <input type="number" id="monto_max" name="monto_max" step="0.01" value="{{ filtros.monto_max }}">
-    </div>
-    <button type="submit" class="btn btn-primary">Filtrar</button>
-</form>
-
-<!-- Tabla de Resultados -->
 <table class="table">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Fecha de Pago</th>
             <th>Estudiante</th>
             <th>Código</th>
@@ -37,6 +14,7 @@
     <tbody>
         {% for pago in pagos %}
             <tr>
+                <td>{{ pago.id }}</td>
                 <td>{{ pago.fecha_pago }}</td>
                 <td>{{ pago.estudiante.nombre }} {{ pago.estudiante.apellido }}</td>
                 <td>{{ pago.estudiante.codigo }}</td>
@@ -45,11 +23,12 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="5">No se encontraron pagos con los criterios seleccionados.</td>
+                <td colspan="5">No se encontraron pagos.</td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+
 
 
 
