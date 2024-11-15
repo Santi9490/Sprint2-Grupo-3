@@ -2,7 +2,6 @@
 from django import forms
 from .models import Pago
 from cuenta.models import Cuenta
-from gestor_usuario_roles.models import Estudiante
 
 class PagoForm(forms.ModelForm):
     class Meta:

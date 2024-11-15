@@ -4,10 +4,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.urls import reverse
 from cuenta.models import Cuenta
-from gestor_usuario_roles.logic.estudiante_logic import get_estudiante_by_id
 from gestor_usuario_roles.models import Estudiante
 from .models import Pago
-from .forms import CodigoEstudianteForm, PagoForm
+from .forms import PagoForm
 from django.contrib.auth.decorators import login_required
 from ofipensiones.auth0backend import getRole
 
