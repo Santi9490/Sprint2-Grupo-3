@@ -1,32 +1,32 @@
 <h1>Lista de Pagos</h1>
-<ul>
-  <h2>Listado de Pagos{% if estudiante %} para {{ estudiante.nombre }} {{ estudiante.apellido }}{% endif %}</h2>
-  
-  <table class="table">
+
+<h2>Listado de Pagos{% if estudiante %} para {{ estudiante.nombre }} {{ estudiante.apellido }}{% endif %}</h2>
+
+<table class="table">
     <thead>
-      <tr>
-        <th>Fecha de Pago</th>
-        <th>Estudiante</th>
-        <th>Código</th>
-        <th>Monto</th>
-        <th>Descripción</th>
-      </tr>
+        <tr>
+            <th>Fecha de Pago</th>
+            <th>Estudiante</th>
+            <th>Código</th>
+            <th>Monto</th>
+            <th>Descripción</th>
+        </tr>
     </thead>
     <tbody>
-      {% for pago in pagos %}
-        <tr>
-          <td>{{ pago.fecha_pago }}</td>
-          <td>{{ pago.cuenta.estudiante.nombre }} {{ pago.cuenta.estudiante.apellido }}</td>
-          <td>{{ pago.cuenta.estudiante.codigo }}</td>
-          <td>{{ pago.monto }}</td>
-          <td>{{ pago.descripcion }}</td>
-        </tr>
-      {% empty %}
-        <tr>
-          <td colspan="4">No se encontraron pagos.</td>
-        </tr>
-      {% endfor %}
+        {% for pago in pagos %}
+            <tr>
+                <td>{{ pago.fecha_pago }}</td>
+                <td>{{ pago.cuenta.estudiante.nombre }} {{ pago.cuenta.estudiante.apellido }}</td>
+                <td>{{ pago.cuenta.estudiante.codigo }}</td>
+                <td>{{ pago.monto }}</td>
+                <td>{{ pago.descripcion }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">No se encontraron pagos.</td>
+            </tr>
+        {% endfor %}
     </tbody>
-  </table>
-</ul>
+</table>
+
 
