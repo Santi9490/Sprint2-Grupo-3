@@ -45,7 +45,7 @@ def pago_list(request, id=None):
         if id:
             pagos = Pago.objects.filter(id=id)
 
-            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago WHERE id = %s", [id])
+            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago WHERE id = %s", [id]) %s es el que evita la inyeccion de sql
         else:
             pagos = Pago.objects.all() 
 
