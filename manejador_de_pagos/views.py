@@ -1,5 +1,5 @@
 # manejador_de_pagos/views.py
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.urls import reverse
@@ -26,16 +26,9 @@ def pago_create(request):
                 cuenta.pas_y_salvo = cuenta.saldo_pendiente == 0
                 cuenta.save()
                 messages.success(request, "Pago registrado exitosamente")
-                return redirect(reverse('pago_list'))
+                return HttpResponseRedirect(reverse('pago_list'))
         else:
-            codigo_form = CodigoEstudianteForm()
-            form = None
-
-        context = {
-            'codigo_form': codigo_form,
-            'form': form
-        }
-        return render(request, 'manejador_de_pagos/pago_create.html', context)
+            print(form.errors)
     else:
         return HttpResponse("Unauthorized User")
 
