@@ -39,7 +39,7 @@ def pago_create(request):
 
 
 @login_required
-def pago_list(request):
+def pago_list(request, id=None):
     role = getRole(request)
     if role in ["Rector", "Coordinador", "Secretaria"]:
         if id:
