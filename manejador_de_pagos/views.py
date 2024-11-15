@@ -19,7 +19,6 @@ def pago_create(request):
             if form.is_valid():
                 cuenta = form.cleaned_data['cuenta']
                 pago = form.save(commit=False)
-                pago.cuenta = cuenta
                 pago.save()
                 cuenta.monto_pagado += pago.monto
                 cuenta.saldo_pendiente = max(0, cuenta.saldo_pendiente - pago.monto)
