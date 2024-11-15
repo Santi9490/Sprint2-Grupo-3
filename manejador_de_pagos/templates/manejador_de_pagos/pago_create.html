@@ -1,0 +1,28 @@
+<!-- manejador_de_pagos/templates/manejador_de_pagos/pago_create.html -->
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Registrar Pago</h2>
+
+  {% if codigo_form %}
+    <!-- Primera etapa: Formulario para ingresar el código del estudiante -->
+    <form method="post">
+      {% csrf_token %}
+      {{ codigo_form.as_p }}
+      <button type="submit" class="btn btn-primary">Buscar Estudiante</button>
+    </form>
+  {% endif %}
+
+  {% if form %}
+    <!-- Segunda etapa: Formulario para registrar el pago -->
+    <h3>Registrar Pago para {{ form.instance.cuenta.estudiante.nombre }} {{ form.instance.cuenta.estudiante.apellido }}</h3>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="hidden" name="codigo" value="{{ form.instance.cuenta.estudiante.codigo }}">
+      <button type="submit" class="btn btn-primary">Registrar Pago</button>
+    </form>
+  {% endif %}
+{% endblock %}
+
+

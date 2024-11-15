@@ -24,7 +24,10 @@ urlpatterns = [
     path('', include('gestor_colegios.urls')),
     path('', include('cuenta.urls')),
     path('', include('alarms.urls')),
+    path('', include('manejador_de_pagos.urls')),
     path('health-check/', views.health_check),
+    path(r'', include('django.contrib.auth.urls')),
+    path(r'', include('social_django.urls')),
 
 ]
 

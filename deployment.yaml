@@ -1,98 +1,33 @@
 resources:
 # Firewall rules
-- name: services-apps
+- name: authd-firewall-django
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - authd-django
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8080
+- name: authd-firewall-db
   type: compute.v1.firewall
   properties:
     network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
     priority: 1000
     direction: INGRESS
     sourceTags: 
-    - circuit-breaker
+    - authd-django
     targetTags:
-    - services-firewall
-    allowed:
-    - IPProtocol: TCP
-      ports: 
-      - 8080
-- name: services-apps-web
-  type: compute.v1.firewall
-  properties:
-    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-    priority: 1000
-    direction: INGRESS
-    sourceRanges: 
-    - 0.0.0.0/0
-    targetTags:
-    - services-firewall
-    allowed:
-    - IPProtocol: TCP
-      ports: 
-      - 8080
-- name: circuit-breaker
-  type: compute.v1.firewall
-  properties:
-    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-    priority: 1000
-    direction: INGRESS
-    sourceRanges: 
-    - 0.0.0.0/0
-    targetTags:
-    - circuit-breaker
-    allowed:
-    - IPProtocol: TCP
-      ports: 
-      - 8000
-- name: circuit-breaker-admin
-  type: compute.v1.firewall
-  properties:
-    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-    priority: 1000
-    direction: INGRESS
-    sourceRanges: 
-    - 0.0.0.0/0
-    targetTags:
-    - circuit-breaker
-    allowed:
-    - IPProtocol: TCP
-      ports: 
-      - 8001
-- name: monitoring-db
-  type: compute.v1.firewall
-  properties:
-    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-    priority: 1000
-    direction: INGRESS
-    sourceTags: 
-    - services-firewall
-    targetTags:
-    - monitoring-db
+    - authd-db
     allowed:
     - IPProtocol: TCP
       ports: 
       - 5432
-
-# Kong instance
-- type: compute.v1.instance
-  name: kong-instance
-  properties:
-    zone: us-central1-a
-    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
-    disks:
-    - deviceName: boot
-      type: PERSISTENT
-      boot: true
-      autoDelete: true
-      initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
-    networkInterfaces:
-    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-      networkIP: 10.128.0.51
-      accessConfigs:
-      - name: External NAT
-        type: ONE_TO_ONE_NAT
-    tags:
-      items: 
-      - circuit-breaker
 
 # Database instance
 - type: compute.v1.instance
@@ -109,13 +44,13 @@ resources:
         sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
     networkInterfaces:
     - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-      networkIP: 10.128.0.52
+      networkIP: 10.128.0.60
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
     tags:
       items: 
-      - monitoring-db
+      - authd-db
     metadata:
       items:
       - key: startup-script
@@ -130,9 +65,9 @@ resources:
           echo "max_connections=2000" | sudo tee -a /etc/postgresql/12/main/postgresql.conf
           sudo service postgresql restart
 
-# Alarms instances
+# Monitoring app django instance
 - type: compute.v1.instance
-  name: cuenta-alarms-a
+  name: pagos-instance
   properties:
     zone: us-central1-a
     machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
@@ -145,113 +80,13 @@ resources:
         sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
     networkInterfaces:
     - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-      networkIP: 10.128.0.53
+      networkIP: 10.128.0.61
       accessConfigs:
       - name: External NAT
         type: ONE_TO_ONE_NAT
     tags:
       items: 
-      - services-firewall
-    metadata:
-      items:
-      - key: startup-script
-        value: |
-          #!/bin/bash
-          sudo apt-get update
-          sudo apt install python3-pip -y
-          sudo mkdir /labs
-          cd /labs
-          sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
-          cd Sprint2-Grupo-3
-          sudo pip3 install -r requirements.txt
-- type: compute.v1.instance
-  name: cuenta-alarms-b
-  properties:
-    zone: us-central1-a
-    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
-    disks:
-    - deviceName: boot
-      type: PERSISTENT
-      boot: true
-      autoDelete: true
-      initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
-    networkInterfaces:
-    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-      networkIP: 10.128.0.54
-      accessConfigs:
-      - name: External NAT
-        type: ONE_TO_ONE_NAT
-    tags:
-      items: 
-      - services-firewall
-    metadata:
-      items:
-      - key: startup-script
-        value: |
-          #!/bin/bash
-          sudo apt-get update
-          sudo apt install python3-pip -y
-          sudo mkdir /labs
-          cd /labs
-          sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
-          cd Sprint2-Grupo-3
-          sudo pip3 install -r requirements.txt
-- type: compute.v1.instance
-  name: cuenta-alarms-c
-  properties:
-    zone: us-central1-a
-    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
-    disks:
-    - deviceName: boot
-      type: PERSISTENT
-      boot: true
-      autoDelete: true
-      initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
-    networkInterfaces:
-    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-      networkIP: 10.128.0.55
-      accessConfigs:
-      - name: External NAT
-        type: ONE_TO_ONE_NAT
-    tags:
-      items: 
-      - services-firewall
-    metadata:
-      items:
-      - key: startup-script
-        value: |
-          #!/bin/bash
-          sudo apt-get update
-          sudo apt install python3-pip -y
-          sudo mkdir /labs
-          cd /labs
-          sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
-          cd Sprint2-Grupo-3
-          sudo pip3 install -r requirements.txt
-# Monitoring app instance
-- type: compute.v1.instance
-  name: monitoring-app
-  properties:
-    zone: us-central1-a
-    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
-    disks:
-    - deviceName: boot
-      type: PERSISTENT
-      boot: true
-      autoDelete: true
-      initializeParams:
-        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
-    networkInterfaces:
-    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-      networkIP: 10.128.0.56
-      accessConfigs:
-      - name: External NAT
-        type: ONE_TO_ONE_NAT
-    tags:
-      items: 
-      - services-firewall
+      - authd-django
     metadata:
       items:
       - key: startup-script
