@@ -1,25 +1,54 @@
 <!-- manejador_de_pagos/templates/manejador_de_pagos/pago_create.html -->
 <h1>Crear Pago</h1>
-  <h2>Registrar Pago</h2>
+<form method="post">
+    {% csrf_token %}
+    <div>
+        {{ form.estudiante.label_tag }}
+        {{ form.estudiante }}
+    </div>
+    <div>
+        {{ form.cuenta.label_tag }}
+        <select id="id_cuenta" name="cuenta">
+            <option value="" selected>---------</option>
+        </select>
+    </div>
+    <div>
+        {{ form.monto.label_tag }}
+        {{ form.monto }}
+    </div>
+    <div>
+        {{ form.descripcion.label_tag }}
+        {{ form.descripcion }}
+    </div>
+    <button type="submit" class="btn btn-primary">Registrar Pago</button>
+</form>
 
-  {% if codigo_form %}
-    <!-- Primera etapa: Formulario para ingresar el código del estudiante -->
-    <form method="post">
-      {% csrf_token %}
-      {{ codigo_form.as_p }}
-      <button type="submit" class="btn btn-primary">Buscar Estudiante</button>
-    </form>
-  {% endif %}
+<script>
+    document.getElementById("id_estudiante").addEventListener("change", function () {
+        const estudianteId = this.value;
+        const cuentaSelect = document.getElementById("id_cuenta");
 
-  {% if form %}
-    <!-- Segunda etapa: Formulario para registrar el pago -->
-    <h3>Registrar Pago para {{ form.instance.cuenta.estudiante.nombre }} {{ form.instance.cuenta.estudiante.apellido }}</h3>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="hidden" name="codigo" value="{{ form.instance.cuenta.estudiante.codigo }}">
-      <button type="submit" class="btn btn-primary">Registrar Pago</button>
-    </form>
-  {% endif %}
+        if (estudianteId) {
+            fetch(`/api/cuentas/${estudianteId}/`)  // Llama a la URL de la API
+                .then(response => response.json())
+                .then(data => {
+                    cuentaSelect.innerHTML = '<option value="">---------</option>'; // Limpia las opciones
+                    data.forEach(cuenta => {
+                        const option = document.createElement("option");
+                        option.value = cuenta.id;
+                        option.textContent = cuenta.descripcion;  // Muestra descripción de la cuenta
+                        cuentaSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar las cuentas:', error);
+                });
+        } else {
+            cuentaSelect.innerHTML = '<option value="">---------</option>';
+        }
+    });
+</script>
+
+
 
 
