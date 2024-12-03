@@ -3,14 +3,23 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.urls import reverse
+import requests
 from cuenta.models import Cuenta
-from gestor_usuario_roles.models import Estudiante
+from manejador_estudiantes.ofipensiones import settings
 from .models import Pago
 from .forms import PagoForm
 from django.contrib.auth.decorators import login_required
 from ofipensiones.auth0backend import getRole
 
-@login_required
+def get_estudiante(data):
+    r = requests.get(settings.PATH_ESTUDIANTES, headers={"Accept":"application/json"})
+    estudiantes = r.json()
+    for estudiante in estudiantes:
+        if data["estudiante"] == estudiante["codigo"]:
+            return estudiante["codigo"]
+    return -1
+
+
 def pago_create(request):
     role = getRole(request)
     if role == "Rector" or role == "Coordinador":
@@ -44,17 +53,25 @@ def pago_list(request, id=None):
     if role in ["Rector", "Coordinador", "Secretaria"]:
         if id:
             pagos = Pago.objects.filter(id=id)
-            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago WHERE id = %s", [id]) %s y la "," es el que evita la inyeccion de sql
-            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago WHERE id = %s" %id) aqui si se puede hacer inyeccion de sql
         else:
-            pagos = Pago.objects.all() 
-
-            #pagos = Pago.objects.raw("SELECT * FROM manejador_de_pagos_pago")
+            pagos = Pago.objects.all()
 
         return render(request, 'manejador_de_pagos/pago_list.html', {'pagos': pagos})
     else:
         return HttpResponse("Unauthorized User")
 
+@login_required
+def pago_list(request):
+    role = getRole(request)
+    if role in ["Rector", "Coordinador", "Secretaria"]:
+        if id:
+            pagos = Pago.objects.filter(id=id)
+        else:
+            pagos = Pago.objects.all()
+
+        return render(request, 'manejador_de_pagos/pago_list.html', {'pagos': pagos})
+    else:
+        return HttpResponse("Unauthorized User")
 
     
 @login_required
@@ -62,3 +79,11 @@ def obtener_cuentas_por_estudiante(request, estudiante_id):
     cuentas = Cuenta.objects.filter(estudiante_id=estudiante_id)
     data = [{'id': cuenta.id, 'descripcion': cuenta.descripcion} for cuenta in cuentas]
     return JsonResponse(data, safe=False)
+
+def generar_reporte(request, estudiante_id):
+    cuentas = Cuenta.objects.filter(estudiante_id=estudiante_id)
+    data = [{'id': cuenta.id, 'descripcion': cuenta.descripcion} for cuenta in cuentas]
+    # TODO: Generar un descargable con todas las cuentas y pagos del estudiante
+    return JsonResponse(data, safe=False)
+
+

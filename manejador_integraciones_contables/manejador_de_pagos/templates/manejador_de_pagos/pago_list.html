@@ -13,14 +13,24 @@
     </thead>
     <tbody>
         {% for pago in pagos %}
-            <tr>
-                <td>{{ pago.id }}</td>
-                <td>{{ pago.fecha_pago }}</td>
+            <tr>                
                 <td>{{ pago.estudiante.nombre }} {{ pago.estudiante.apellido }}</td>
                 <td>{{ pago.estudiante.codigo }}</td>
-                <td>{{ pago.monto }}</td>
-                <td>{{ pago.descripcion }}</td>
+                <tr>
+                    <td colspan="6">
+                        <strong>Cuentas del Estudiante:</strong>
+                        <ul>
+                            {% for cuenta in pago.estudiante.cuentas %}
+                                <li>{{ cuenta.numero }} - {{ cuenta.tipo }} - {{ cuenta.descuento }} - {{ cuenta.fecha_pago }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
             </tr>
+        
+        <button type="button" class="btn btn-primary" href="/reporte/">
+            Generar Reporte Pagos </button> 
+        
         {% empty %}
             <tr>
                 <td colspan="5">No se encontraron pagos.</td>

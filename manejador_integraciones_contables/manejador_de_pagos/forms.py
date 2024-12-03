@@ -21,10 +21,10 @@ class PagoForm(forms.ModelForm):
 
         if 'estudiante' in self.data:
             try:
-                estudiante_id = int(self.data.get('estudiante'))
-                self.fields['cuenta'].queryset = Cuenta.objects.filter(estudiante_id=estudiante_id)
+                estudiante_codigo = int(self.data.get('estudiante'))
+                self.fields['cuenta'].queryset = Cuenta.objects.filter(estudiante_codigo=estudiante_codigo)
             except (ValueError, TypeError):
-                pass  # Mantener queryset vacío si no es válido
+                pass
         elif self.instance.pk:
             self.fields['cuenta'].queryset = Cuenta.objects.filter(estudiante=self.instance.estudiante)
 
