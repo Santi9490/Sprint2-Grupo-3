@@ -72,7 +72,6 @@ resources:
         ports: 
           - 8080
 
-# Firewall rules
 - name: nosqld-firewall-django
   type: compute.v1.firewall
   properties:
@@ -233,7 +232,7 @@ resources:
   name: msd-estudiantes-ms
   properties:
     zone: us-central1-a
-    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-small  # Cambié e2-micro a e2-small
     disks:
     - deviceName: boot
       type: PERSISTENT
@@ -267,7 +266,7 @@ resources:
   type: compute.v1.instance
   properties:
     zone: us-central1-a
-    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-medium  # Cambié e2-micro a e2-medium
     disks:
     - deviceName: boot
       type: PERSISTENT
@@ -298,6 +297,7 @@ resources:
           sudo pip3 install -r requirements.txt
           sudo python3 manage.py makemigrations
           sudo python3 manage.py migrate
+
 
 
 - name: msd-cronogramas-springboot-service
