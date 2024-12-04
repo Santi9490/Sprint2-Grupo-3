@@ -1,12 +1,7 @@
-from django.conf import settings
-from django.shortcuts import render
-from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.urls import reverse
+from django.http import JsonResponse
 from pymongo import MongoClient
-from .forms import EstudianteForm
-from .models import Estudiante
 from django.contrib.auth.decorators import login_required
+from ofipensiones import settings
 from ofipensiones.auth0backend import getRole
 
 client = MongoClient(settings.MONGO_CLI)
