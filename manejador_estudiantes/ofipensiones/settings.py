@@ -130,6 +130,7 @@ STATIC_URL = '/static/'
 # MongoDB Atlas Config
 MONGO_CLI = os.environ['MONGO_CLIENT']
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
