@@ -13,31 +13,39 @@
     </thead>
     <tbody>
         {% for pago in pagos %}
-            <tr>                
+            <tr>
                 <td>{{ pago.estudiante.nombre }} {{ pago.estudiante.apellido }}</td>
+                <td>{{ pago.fecha_pago }}</td>
                 <td>{{ pago.estudiante.codigo }}</td>
-                <tr>
-                    <td colspan="6">
-                        <strong>Cuentas del Estudiante:</strong>
-                        <ul>
-                            {% for cuenta in pago.estudiante.cuentas %}
-                                <li>{{ cuenta.numero }} - {{ cuenta.tipo }} - {{ cuenta.descuento }} - {{ cuenta.fecha_pago }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
+                <td>{{ pago.monto }}</td>
+                <td>{{ pago.descripcion }}</td>
             </tr>
-        
-        <button type="button" class="btn btn-primary" href="/reporte/">
-            Generar Reporte Pagos </button> 
-        
+            <tr>
+                <td colspan="6">
+                    <strong>Cuentas del Estudiante:</strong>
+                    <ul>
+                        {% for cuenta in pago.estudiante.cuentas %}
+                            <li>{{ cuenta.descripcion }} - {{ cuenta.monto_pagado }} - {{ cuenta.saldo_pendiente }} - {{ cuenta.fecha_pago }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
         {% empty %}
             <tr>
-                <td colspan="5">No se encontraron pagos.</td>
+                <td colspan="6">No se encontraron pagos.</td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<a href="{% url 'api_reportes' %}" class="btn btn-primary">
+    Generar Reporte Pagos
+</a>
+
+<a href="{% url 'api_reportes' %}" class="btn btn-primary">
+    Generar Reporte Pagos Con Datos Locales
+</a>
+
 
 
 

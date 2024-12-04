@@ -1,47 +1,124 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+from pymongo import MongoClient
 from .forms import EstudianteForm
 from .models import Estudiante
 from django.contrib.auth.decorators import login_required
 from ofipensiones.auth0backend import getRole
 
+client = MongoClient(settings.MONGO_CLI)
+db = client.gestor_usuario_roles_db
+estudiantes_collection = db['estudiantes']
+
+# Crear índices al iniciar la aplicación
+estudiantes_collection.create_index([('codigo', 1)], unique=True)
+estudiantes_collection.create_index([('nombre', 1)])
+estudiantes_collection.create_index([('apellido', 1)])
+
 @login_required
 def estudiante_list(request):
+    """Devuelve todos los estudiantes de la base de datos NoSQL (MongoDB)"""
     role = getRole(request)
     if role == "Rector" or role == "Coordinador":
-        estudiantes = Estudiante.objects.all()
-        context = {
-            'estudiante_list': estudiantes
-        }
-        return render(request, 'estudiante/estudiantes.html', context)
+        # Ahora las consultas de 'find' estarán optimizadas por los índices
+        estudiantes = estudiantes_collection.find().sort([('apellido', 1)])  # Usando el índice de 'apellido' para ordenarlo
+        result = []
+        for estudiante in estudiantes:
+            result.append({
+                'id': str(estudiante['_id']),
+                'nombre': estudiante['nombre'],
+                'apellido': estudiante['apellido'],
+                'codigo': estudiante['codigo'],
+                'fecha_nacimiento': estudiante['fecha_nacimiento'],
+                'numero_acudiente': estudiante['numero_acudiente'],
+                'direccion': estudiante['direccion']
+            })
+        client.close()
+        return JsonResponse(result, safe=False)
     else:
-        return HttpResponse("Unauthorized User")
+        return JsonResponse({"error": "Unauthorized User"}, status=403)
 
 @login_required
 def estudiante_create(request):
+    """Crea un nuevo estudiante en la base de datos NoSQL (MongoDB)"""
     role = getRole(request)
     if role == "Rector" or role == "Coordinador":
-        if request.method == 'POST':
-            form = EstudianteForm(request.POST)
-            if form.is_valid():
-                form.save() 
-                messages.add_message(request, messages.SUCCESS, 'Estudiante creado exitosamente')
-                return HttpResponseRedirect(reverse('estudianteCreate'))
-            else:
-                print(form.errors)
+        if request.method == "POST":
+            data = {
+                'nombre': request.POST['nombre'],
+                'apellido': request.POST['apellido'],
+                'codigo': request.POST['codigo'],
+                'fecha_nacimiento': request.POST['fecha_nacimiento'],
+                'numero_acudiente': request.POST['numero_acudiente'],
+                'direccion': request.POST['direccion'],
+            }
+
+            # Verifica si el estudiante ya existe por el campo 'codigo'
+            existing_estudiante = estudiantes_collection.find_one({'codigo': data['codigo']})
+            if existing_estudiante:
+                return JsonResponse({"error": "Estudiante con ese código ya existe"}, status=400)
+
+            # Insertamos el nuevo estudiante en MongoDB
+            result = estudiantes_collection.insert_one(data)
+            
+            response_data = {
+                "id": str(result.inserted_id),
+                "message": "Estudiante creado exitosamente"
+            }
+            client.close()
+            return JsonResponse(response_data, safe=False)
         else:
-            form = EstudianteForm()
-
-        context = {
-            'form': form,
-        }
-        return render(request, 'estudiante/estudianteCreate.html', context)
+            return JsonResponse({"error": "Invalid request method"}, status=400)
     else:
-        return HttpResponse("Unauthorized User")
+        return JsonResponse({"error": "Unauthorized User"}, status=403)
 
+def estudiantes(request):
+    """Devuelve todos los estudiantes de la base de datos NoSQL (MongoDB)"""
+    estudiantes = estudiantes_collection.find().sort([('nombre', 1)])  # Usando índice de 'nombre' para ordenarlo
+    result = []
+    for estudiante in estudiantes:
+        result.append({
+            'id': str(estudiante['_id']),
+            'nombre': estudiante['nombre'],
+            'apellido': estudiante['apellido'],
+            'codigo': estudiante['codigo'],
+            'fecha_nacimiento': estudiante['fecha_nacimiento'],
+            'numero_acudiente': estudiante['numero_acudiente'],
+            'direccion': estudiante['direccion']
+        })
+    client.close()
+    return JsonResponse(result, safe=False)
 
+def estudiante_new(request):
+    if request.method == "POST":
+        data = {
+            'nombre': request.POST['nombre'],
+            'apellido': request.POST['apellido'],
+            'codigo': request.POST['codigo'],
+            'fecha_nacimiento': request.POST['fecha_nacimiento'],
+            'numero_acudiente': request.POST['numero_acudiente'],
+            'direccion': request.POST['direccion'],
+        }
+        
+        # Verifica si el estudiante ya existe por el campo 'codigo'
+        existing_estudiante = estudiantes_collection.find_one({'codigo': data['codigo']})
+        if existing_estudiante:
+            return JsonResponse({"error": "Estudiante con ese código ya existe"}, status=400)
+        
+        # Insertamos el nuevo estudiante en MongoDB
+        result = estudiantes_collection.insert_one(data)
+        
+        response_data = {
+            "id": str(result.inserted_id),
+            "message": "Estudiante creado exitosamente"
+        }
+        client.close()
+        return JsonResponse(response_data, safe=False)
+    else:
+        return JsonResponse({"error": "Invalid request method"}, status=400)
 
 
 

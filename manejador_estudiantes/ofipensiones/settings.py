@@ -39,10 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gestor_usuario_roles',
-    'gestor_colegios',
-    'cuenta',
-    'alarms',
-    'manejador_de_pagos',
     'social_django',
 ]
 
@@ -80,16 +76,16 @@ WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'monitoring_db',
-        'USER': 'monitoring_user',
-        'PASSWORD': 'isis2503',
-        'HOST': '10.128.0.60',
-        'PORT': '',
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'monitoring_db',
+#       'USER': 'monitoring_user',
+#       'PASSWORD': 'isis2503',
+#       'HOST': '10.128.0.60',
+#       'PORT': '',
+#   }
+#}
 
 
 # Password validation

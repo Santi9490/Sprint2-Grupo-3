@@ -38,11 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gestor_usuario_roles',
-    'gestor_colegios',
     'cuenta',
-    'alarms',
     'manejador_de_pagos',
+    'consultor_base_datos',
     'social_django',
 ]
 
@@ -156,4 +154,7 @@ AUTHENTICATION_BACKENDS = {
     'ofipensiones.auth0backend.Auth0',
     'django.contrib.auth.backends.ModelBackend',
 }
+
+PATH_API_GATEWAY = "http://" + os.environ.get("KONG_HOST", "10.128.0.81") + ":" + os.environ.get("KONG_PORT", "8000")
+PATH_ESTUDIANTES = PATH_API_GATEWAY + "/estudianteslist"
 
