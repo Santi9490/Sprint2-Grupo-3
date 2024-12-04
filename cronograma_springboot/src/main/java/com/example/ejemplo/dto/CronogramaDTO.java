@@ -1,12 +1,8 @@
 package com.example.ejemplo.dto;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class CronogramaDTO {
@@ -20,5 +16,6 @@ public class CronogramaDTO {
     private String status;
 
     private String nombre;
+
 
 }

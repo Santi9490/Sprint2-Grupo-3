@@ -1,0 +1,341 @@
+resources:
+# Firewall rules
+- name: msd-api-gateway
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - msd-api-gateway
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8000
+- name: msd-services-apps
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceTags: 
+    - msd-api-gateway
+    targetTags:
+    - msd-services-firewall
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8080
+- name: msd-services-apps-web
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - msd-services-firewall
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8080
+- name: msd-service-db
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceTags: 
+    - msd-services-firewall
+    targetTags:
+    - msd-service-db
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 5432
+  
+- name: msd-service-springboot-firewall
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceTags: 
+      - msd-service-springboot
+    targetTags:
+      - msd-service-springboot
+    allowed:
+      - IPProtocol: TCP
+        ports: 
+          - 8080
+
+- name: nosqld-firewall-django
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - nosqld-django
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8080
+- name: nosqld-firewall-mongo
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceTags: 
+    - nosqld-django
+    targetTags:
+    - nosqld-mongo
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 27017
+
+# Kong instance
+- name: msd-kong-instance
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-8
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+      networkIP: 10.128.0.81
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - msd-api-gateway
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo mkdir /home/labs
+          cd /home/labs
+          sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
+          cd Sprint2-Grupo-3
+          docker network create kong-net
+          docker run -d --name kong --network=kong-net --restart=always \
+          -v "$(pwd):/kong/declarative/" -e "KONG_DATABASE=off" \
+          -e "KONG_DECLARATIVE_CONFIG=/kong/declarative/kong.yaml" \
+          -p 8000:8000 kong/kong-gateway
+
+# Database instances
+- type: compute.v1.instance
+  name: msd-estudiantes-db
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-386-64
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+      networkIP: 10.128.0.82
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - nosqld-mongo
+      
+
+- name: msd-pagos-db
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-463-8
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+      networkIP: 10.128.0.83
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - msd-service-db
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          docker run --restart=always -d -e POSTGRES_USER=pagos_user -e POSTGRES_DB=pagos_db -e POSTGRES_PASSWORD=isis2503 -p 5432:5432 --name pagos-db postgres
+
+
+# PostgreSQL instance
+- name: msd-cronogramas-db
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+      networkIP: 10.128.0.86
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items:
+      - msd-service-db
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt-get install postgresql postgresql-contrib -y
+          sudo -u postgres psql -c "CREATE DATABASE your_database_name;"
+          sudo -u postgres psql -c "CREATE USER postgres_user WITH ENCRYPTED PASSWORD 'password123';"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE your_database_name TO postgres_user;"
+          sudo systemctl enable postgresql
+          sudo systemctl start postgresql
+
+
+# Service instances
+- type: compute.v1.instance
+  name: msd-estudiantes-ms
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-small  # Cambié e2-micro a e2-small
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+      networkIP: 10.128.0.84
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - nosqld-django
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo mkdir /labs
+          cd /labs
+          sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
+          cd Sprint2-Grupo-3/manejador_estudiantes
+          sudo pip3 install -r requirements.txt
+
+- name: msd-pagos-ms
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-medium  # Cambié e2-micro a e2-medium
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+      networkIP: 10.128.0.85
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - msd-services-firewall
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo mkdir /home/labs
+          cd /home/labs
+          sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
+          cd Sprint2-Grupo-3/manejador_integraciones_contables
+          sudo pip3 install -r requirements.txt
+          sudo python3 manage.py makemigrations
+          sudo python3 manage.py migrate
+
+
+
+- name: msd-cronogramas-springboot-service
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a 
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro  # Tipo de máquina (e2-micro para bajo costo)
+    disks:
+      - deviceName: boot
+        type: PERSISTENT
+        boot: true
+        autoDelete: true
+        initializeParams:
+          sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b  # Imagen de Ubuntu
+    networkInterfaces:
+      - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+        networkIP: 10.128.0.87
+        accessConfigs:
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+    tags:
+      items:
+        - msd-service-springboot
+    metadata:
+      items:
+        - key: startup-script
+          value: |
+            #!/bin/bash
+            # Actualizamos los paquetes del sistema
+            sudo apt-get update
+            # Instalamos OpenJDK para ejecutar la aplicación Spring Boot
+            sudo apt install openjdk-11-jdk -y
+            sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
+            cd Sprint2-Grupo-3/cronograma_springboot
+            # Instalamos Maven si es necesario
+            sudo apt install maven -y
+            # Empaquetamos el proyecto
+            sudo mvn clean package
+            # Ejecutamos la aplicación Spring Boot
+            sudo java -jar target/your-app.jar
+

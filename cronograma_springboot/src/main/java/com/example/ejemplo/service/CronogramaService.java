@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.ejemplo.dto.CronogramaDTO;
 import com.example.ejemplo.entities.CronogramaEntity;
 import com.example.ejemplo.repository.CronogramaRepository;
 

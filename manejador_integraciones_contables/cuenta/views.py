@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.urls import reverse
 import requests
 
 from cuenta.models import Cuenta
 from cuenta.forms import CuentaForm
-from manejador_estudiantes.ofipensiones import settings
+from ofipensiones import settings
 
 def cuenta_list(request):
     estados_cuenta = Cuenta.objects.select_related('estudiante').all()

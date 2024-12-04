@@ -38,11 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gestor_usuario_roles',
-    'gestor_colegios',
     'cuenta',
-    'alarms',
     'manejador_de_pagos',
+    'consultor_base_datos',
     'social_django',
 ]
 
@@ -83,11 +81,11 @@ WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'monitoring_db',
-        'USER': 'monitoring_user',
-        'PASSWORD': 'isis2503',
-        'HOST': '10.128.0.60',
-        'PORT': '',
+        'NAME': os.environ.get("PAGOS_DB", "pagos_db"),
+        'USER': os.environ.get("PAGOS_DB_USER", "pagos_user"),
+        'PASSWORD': os.environ.get("PAGOS_DB_PASSWD", "isis2503"),
+        'HOST': os.environ.get("PAGOS_DB_HOST", "10.128.0.83"),
+        'PORT': os.environ.get("PAGOS_DB_PORT", "5432")
     }
 }
 
@@ -138,7 +136,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.134.195.180:8080"
+LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F35.238.151.115:8080"
 
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-2lbfseybkx5rveyk.us.auth0.com'
@@ -156,4 +154,7 @@ AUTHENTICATION_BACKENDS = {
     'ofipensiones.auth0backend.Auth0',
     'django.contrib.auth.backends.ModelBackend',
 }
+
+PATH_API_GATEWAY = "http://" + os.environ.get("KONG_HOST", "10.128.0.81") + ":" + os.environ.get("KONG_PORT", "8000")
+PATH_ESTUDIANTES = PATH_API_GATEWAY + "/estudianteslist"
 
