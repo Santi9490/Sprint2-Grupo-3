@@ -3,7 +3,6 @@ from django.http import JsonResponse
 import requests
 from cuenta.models import Cuenta
 from ofipensiones import settings
-from manejador_de_pagos.views import obtener_cuentas_por_estudiante
 
 reporte_cache = None
 
