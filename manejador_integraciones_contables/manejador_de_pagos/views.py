@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.urls import reverse
 import requests
 from cuenta.models import Cuenta
-from manejador_estudiantes.ofipensiones import settings
+from manejador_integraciones_contables.ofipensiones import settings
 from .models import Pago
 from .forms import PagoForm
 from django.contrib.auth.decorators import login_required
