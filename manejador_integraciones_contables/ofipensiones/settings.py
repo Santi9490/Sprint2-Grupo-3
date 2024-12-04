@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'monitoring_db',
-        'USER': 'monitoring_user',
-        'PASSWORD': 'isis2503',
-        'HOST': '10.128.0.60',
-        'PORT': '',
+        'NAME': os.environ.get("PAGOS_DB", "pagos_db"),
+        'USER': os.environ.get("PAGOS_DB_USER", "pagos_user"),
+        'PASSWORD': os.environ.get("PAGOS_DB_PASSWD", "isis2503"),
+        'HOST': os.environ.get("PAGOS_DB_HOST", "10.128.0.83"),
+        'PORT': os.environ.get("PAGOS_DB_PORT", "5432")
     }
 }
 
