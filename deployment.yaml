@@ -57,20 +57,20 @@ resources:
       ports: 
       - 5432
   
-  - name: msd-service-springboot-firewall
-    type: compute.v1.firewall
-    properties:
-      network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-      priority: 1000
-      direction: INGRESS
-      sourceTags: 
-        - msd-service-springboot
-      targetTags:
-        - msd-service-springboot
-      allowed:
-        - IPProtocol: TCP
-          ports: 
-            - 8080
+- name: msd-service-springboot-firewall
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceTags: 
+      - msd-service-springboot
+    targetTags:
+      - msd-service-springboot
+    allowed:
+      - IPProtocol: TCP
+        ports: 
+          - 8080
 
 # Firewall rules
 - name: nosqld-firewall-django
@@ -193,7 +193,6 @@ resources:
 
 
 # PostgreSQL instance
-resources:
 - name: msd-cronogramas-db
   type: compute.v1.instance
   properties:
@@ -301,42 +300,42 @@ resources:
           sudo python3 manage.py migrate
 
 
-  - name: msd-cronogramas-springboot-service
-    type: compute.v1.instance
-    properties:
-      zone: us-central1-a 
-      machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro  # Tipo de máquina (e2-micro para bajo costo)
-      disks:
-        - deviceName: boot
-          type: PERSISTENT
-          boot: true
-          autoDelete: true
-          initializeParams:
-            sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b  # Imagen de Ubuntu
-      networkInterfaces:
-        - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
-          networkIP: 10.128.0.87
-          accessConfigs:
-            - name: External NAT
-              type: ONE_TO_ONE_NAT
-      tags:
-        items:
-          - msd-service-springboot
-      metadata:
-        items:
-          - key: startup-script
-            value: |
-              #!/bin/bash
-              # Actualizamos los paquetes del sistema
-              sudo apt-get update
-              # Instalamos OpenJDK para ejecutar la aplicación Spring Boot
-              sudo apt install openjdk-11-jdk -y
-              sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
-              cd Sprint2-Grupo-3/cronograma_springboot
-              # Instalamos Maven si es necesario
-              sudo apt install maven -y
-              # Empaquetamos el proyecto
-              sudo mvn clean package
-              # Ejecutamos la aplicación Spring Boot
-              sudo java -jar target/your-app.jar
+- name: msd-cronogramas-springboot-service
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a 
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/e2-micro  # Tipo de máquina (e2-micro para bajo costo)
+    disks:
+      - deviceName: boot
+        type: PERSISTENT
+        boot: true
+        autoDelete: true
+        initializeParams:
+          sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b  # Imagen de Ubuntu
+    networkInterfaces:
+      - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+        networkIP: 10.128.0.87
+        accessConfigs:
+          - name: External NAT
+            type: ONE_TO_ONE_NAT
+    tags:
+      items:
+        - msd-service-springboot
+    metadata:
+      items:
+        - key: startup-script
+          value: |
+            #!/bin/bash
+            # Actualizamos los paquetes del sistema
+            sudo apt-get update
+            # Instalamos OpenJDK para ejecutar la aplicación Spring Boot
+            sudo apt install openjdk-11-jdk -y
+            sudo git clone https://github.com/Santi9490/Sprint2-Grupo-3.git
+            cd Sprint2-Grupo-3/cronograma_springboot
+            # Instalamos Maven si es necesario
+            sudo apt install maven -y
+            # Empaquetamos el proyecto
+            sudo mvn clean package
+            # Ejecutamos la aplicación Spring Boot
+            sudo java -jar target/your-app.jar
 
