@@ -1,0 +1,47 @@
+# Infraestructura para SPRINT4 de Base de datos MONGO
+# Elementos a desplegar:
+# 1. Firewalls:
+#    - nosqld-firewall-mongo xx
+# 2. Instancias MVs:
+#    - nosqld-mongo-instance (Container Optimized OS sin MongoDB) xx
+
+resources:
+
+- name: nosqld-firewall-mongo
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceTags: 
+    - nosqld-django
+    targetTags:
+    - nosqld-mongo
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 27017
+
+# Mongo Database instance
+- type: compute.v1.instance
+  name: nosqld-mongo-instance
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/spring-3-441023/zones/us-central1-a/machineTypes/n2-standard-2
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/cos-cloud/global/images/cos-101-17162-386-64
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/spring-3-441023/global/networks/default
+      networkIP: 10.128.0.70
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - nosqld-mongo
+
