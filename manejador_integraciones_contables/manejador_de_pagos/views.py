@@ -1,6 +1,6 @@
 # manejador_de_pagos/views.py
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.urls import reverse
 import requests
@@ -8,27 +8,11 @@ from cuenta.models import Cuenta
 from ofipensiones import settings
 from .models import Pago
 from .forms import PagoForm
-from django.contrib.auth.decorators import login_required
-from ofipensiones.auth0backend import getRole
-from consultor_base_datos.views import generar_reporte
+from consultor_base_datos.views import generar_reporte, obtener_cuentas_por_estudiante, get_estudiantes
 from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 
-def get_estudiantes():
-    """Obtiene todos los estudiantes del microservicio"""
-    try:
-        response = requests.get(settings.PATH_ESTUDIANTES, headers={"Accept": "application/json"})
-        response.raise_for_status() 
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Error al obtener estudiantes: {e}")
-        return [] 
 
-def get_estudiante_por_codigo(codigo):
-    """Obtiene un estudiante por su código"""
-    estudiantes = get_estudiantes()
-    return next((estudiante for estudiante in estudiantes if estudiante['codigo'] == codigo), None)
 
 
 def pago_create(request):
@@ -76,18 +60,8 @@ def pago_list(request):
 
     
 def obtener_cuentas_por_estudiante(request, estudiante_codigo):
-    estudiante = get_estudiante_por_codigo(estudiante_codigo)
-    
-    if estudiante is None:
-        return JsonResponse({"error": "Estudiante no encontrado"}, status=404)
-
-    cuentas = Cuenta.objects.filter(estudiante_codigo=estudiante_codigo)
-    data = [{
-        'id': cuenta.id,
-        'descripcion': cuenta.descripcion,
-        'monto_pagado': cuenta.monto_pagado,
-        'saldo_pendiente': cuenta.saldo_pendiente
-    } for cuenta in cuentas]
+    """Obtiene las cuentas de un estudiante"""
+    data = obtener_cuentas_por_estudiante(request, estudiante_codigo)
 
     return JsonResponse(data, safe=False)
 
