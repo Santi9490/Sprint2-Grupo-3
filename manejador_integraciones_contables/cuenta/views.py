@@ -6,7 +6,7 @@ import requests
 
 from cuenta.models import Cuenta
 from cuenta.forms import CuentaForm
-from manejador_estudiantes.ofipensiones import settings
+from manejador_integraciones_contables.ofipensiones import settings
 
 def cuenta_list(request):
     estados_cuenta = Cuenta.objects.select_related('estudiante').all()
