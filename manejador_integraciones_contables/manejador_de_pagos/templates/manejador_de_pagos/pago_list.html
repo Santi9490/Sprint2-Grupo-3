@@ -12,23 +12,13 @@
         </tr>
     </thead>
     <tbody>
-        {% for pago in pagos %}
+        {% for item in pagos %}
             <tr>
-                <td>{{ pago.estudiante.nombre }} {{ pago.estudiante.apellido }}</td>
-                <td>{{ pago.fecha_pago }}</td>
-                <td>{{ pago.estudiante.codigo }}</td>
-                <td>{{ pago.monto }}</td>
-                <td>{{ pago.descripcion }}</td>
-            </tr>
-            <tr>
-                <td colspan="6">
-                    <strong>Cuentas del Estudiante:</strong>
-                    <ul>
-                        {% for cuenta in pago.estudiante.cuentas %}
-                            <li>{{ cuenta.descripcion }} - {{ cuenta.monto_pagado }} - {{ cuenta.saldo_pendiente }} - {{ cuenta.fecha_pago }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
+                <td>{{ item.estudiante.nombre }} {{ item.estudiante.apellido }}</td>
+                <td>{{ item.pago.fecha_pago }}</td>
+                <td>{{ item.estudiante.codigo }}</td>
+                <td>{{ item.pago.monto }}</td>
+                <td>{{ item.pago.descripcion }}</td>
             </tr>
         {% empty %}
             <tr>
@@ -42,9 +32,10 @@
     Generar Reporte Pagos
 </a>
 
-<a href="{% url 'api_reportes' %}" class="btn btn-primary">
+<a href="{% url 'api_reportes_locales' %}" class="btn btn-primary">
     Generar Reporte Pagos Con Datos Locales
 </a>
+
 
 
 
