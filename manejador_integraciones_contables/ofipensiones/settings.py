@@ -134,26 +134,9 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = "/login/auth0"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F35.238.151.115:8080"
 
-SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
-SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-2lbfseybkx5rveyk.us.auth0.com'
-SOCIAL_AUTH_AUTH0_KEY = 'njZmJ2HAK38PKXYcqZbIiLtepKx7i8k4'
-SOCIAL_AUTH_AUTH0_SECRET = 'zolwqahkACKTmUVYasv3nFT6gH7HXk_urYBUwMEjX7AEvuJXeFgSgnVJAYdCk2lP'
 
-SOCIAL_AUTH_AUTH0_SCOPE = [
-    'openid',
-    'profile',
-    'email',
-    'role',
-]
 
-AUTHENTICATION_BACKENDS = {
-    'ofipensiones.auth0backend.Auth0',
-    'django.contrib.auth.backends.ModelBackend',
-}
 
 PATH_API_GATEWAY = "http://" + os.environ.get("KONG_HOST", "10.128.0.81") + ":" + os.environ.get("KONG_PORT", "8000")
 PATH_ESTUDIANTES = PATH_API_GATEWAY + "/estudianteslist"
