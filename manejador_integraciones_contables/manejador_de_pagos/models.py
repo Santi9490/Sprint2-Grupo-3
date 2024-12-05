@@ -10,4 +10,4 @@ class Pago(models.Model):
     descripcion = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return f"Pago de {self.monto} para {self.cuenta.estudiante.nombre} {self.cuenta.estudiante.apellido}"
+        return f"Pago de {self.monto} para estudiante con ID {self.estudiante}"

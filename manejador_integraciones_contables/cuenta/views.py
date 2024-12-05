@@ -7,13 +7,19 @@ import requests
 from cuenta.models import Cuenta
 from cuenta.forms import CuentaForm
 from ofipensiones import settings
+from other import obtener_datos_estudiante
 
 def cuenta_list(request):
-    estados_cuenta = Cuenta.objects.select_related('estudiante').all()
-    context = {
-        'cuenta_list': estados_cuenta
-    }
-    return render(request, 'cuenta/cuentas.html', context)
+    cuentas = Cuenta.objects.all()
+    cuentas_con_datos = []
+    for cuenta in cuentas:
+        estudiante_datos = obtener_datos_estudiante(cuenta.estudiante)
+        cuentas_con_datos.append({
+            'cuenta': cuenta,
+            'estudiante': estudiante_datos
+        })
+    return render(request, 'cuenta/cuentas.html', {'cuenta_list': cuentas_con_datos})
+
 
 # Función para crear un nuevo estado de cuenta
 def cuenta_create(request):
@@ -48,9 +54,14 @@ def cuenta_detalle(request):
 
 
 def get_estudiante(data):
-    r = requests.get(settings.PATH_ESTUDIANTES, headers={"Accept":"application/json"})
-    estudiantes = r.json()
-    for estudiante in estudiantes:
-        if data["estudiante"] == estudiante["codigo"]:
-            return estudiante["codigo"]
-    return -1
+    try:
+        response = requests.get(settings.PATH_ESTUDIANTES, headers={"Accept": "application/json"})
+        if response.status_code == 200:
+            estudiantes = response.json()
+            for estudiante in estudiantes:
+                if str(data["estudiante"]) == str(estudiante["codigo"]):  # Asegúrate de que ambos sean cadenas
+                    return estudiante
+    except requests.RequestException as e:
+        print(f"Error al obtener lista de estudiantes: {e}")
+    return None
+

@@ -1,16 +1,30 @@
-<!-- estudiante/estados_cuenta.html -->
-<h1>Lista de Estados de Cuenta</h1>
+<h1>Lista de Cuentas</h1>
 <table>
-    <tr>
-        <th>Estudiante</th>
-        <th>Saldo</th>
-        <th>Fecha de Actualización</th>
-    </tr>
-    {% for estado in cuenta_list %}
-    <tr>
-        <td>{{ estado.estudiante.nombre }} {{ estado.estudiante.apellido }}</td>
-        <td>{{ estado.saldo }}</td>
-        <td>{{ estado.fecha_actualizacion }}</td>
-    </tr>
-    {% endfor %}
+    <thead>
+        <tr>
+            <th>Estudiante</th>
+            <th>Descripción</th>
+            <th>Monto Pagado</th>
+            <th>Saldo Pendiente</th>
+            <th>Última Actualización</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cuenta_list %}
+            <tr>
+                <td>
+                    {% if item.estudiante %}
+                        {{ item.estudiante.nombre }} {{ item.estudiante.apellido }}
+                    {% else %}
+                        Estudiante no encontrado
+                    {% endif %}
+                </td>
+                <td>{{ item.cuenta.descripcion }}</td>
+                <td>{{ item.cuenta.monto_pagado }}</td>
+                <td>{{ item.cuenta.saldo_pendiente }}</td>
+                <td>{{ item.cuenta.fecha_actualizacion }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
+

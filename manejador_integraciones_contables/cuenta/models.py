@@ -1,4 +1,8 @@
 from django.db import models
+import requests
+
+from other import obtener_datos_estudiante
+from ofipensiones import settings
 
 
 
@@ -15,4 +19,8 @@ class Cuenta(models.Model):
     fecha_actualizacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Cuenta de {self.estudiante.nombre} {self.estudiante.apellido}"
+        estudiante_detalle = obtener_datos_estudiante(self.estudiante)
+        return f"Cuenta de {self.estudiante_detalle.nombre} {self.estudiante_detalle.apellido}"
+    
+
+

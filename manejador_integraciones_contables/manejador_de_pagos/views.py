@@ -35,18 +35,35 @@ def pago_create(request):
         form = PagoForm()
 
     return render(request, 'manejador_de_pagos/pago_create.html', {'form': form})
-    
+
+
+def obtener_datos_estudiante(estudiante_id):
+    """
+    Realiza una solicitud al microservicio de estudiantes para obtener los datos del estudiante.
+    """
+    url = f"{settings.PATH_ESTUDIANTES}/{estudiante_id}/"  # Asegúrate de configurar esta URL en settings.py
+    try:
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            return response.json()  # Devuelve los datos como diccionario
+        else:
+            return None
+    except requests.RequestException as e:
+        print(f"Error al obtener datos del estudiante: {e}")
+        return None
 
 
 
-def pago_list(request, id=None):
-    
-    if id:
-        pagos = Pago.objects.filter(id=id)
-    else:
-        pagos = Pago.objects.all()
-
-    return render(request, 'manejador_de_pagos/pago_list.html', {'pagos': pagos})
+def pago_list(request):
+    pagos = Pago.objects.all()
+    pagos_con_datos = []
+    for pago in pagos:
+        estudiante_datos = obtener_datos_estudiante(pago.estudiante)
+        pagos_con_datos.append({
+            'pago': pago,
+            'estudiante': estudiante_datos
+        })
+    return render(request, 'pagos/pago_list.html', {'pagos': pagos_con_datos})
     
 
 def pago_list(request):
