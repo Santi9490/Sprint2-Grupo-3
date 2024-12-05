@@ -42,21 +42,28 @@ def get_estudiante_por_codigo(codigo):
         print(f"Error al conectar con el microservicio: {e}")
         return None
 
-def obtener_cuentas_por_estudiante(request, estudiante_codigo):
-    estudiante = get_estudiante_por_codigo(estudiante_codigo)
-    
-    if estudiante is None:
-        return JsonResponse({"error": "Estudiante no encontrado"}, status=404)
-
-    cuentas = Cuenta.objects.filter(estudiante_codigo=estudiante_codigo)
+def obtener_cuentas(estudiante_codigo):
+    """Obtiene las cuentas asociadas a un estudiante por su código."""
+    cuentas = Cuenta.objects.filter(estudiante=estudiante_codigo)  # Ajusta el filtro según tu modelo
     data = [{
         'id': cuenta.id,
         'descripcion': cuenta.descripcion,
         'monto_pagado': cuenta.monto_pagado,
         'saldo_pendiente': cuenta.saldo_pendiente
     } for cuenta in cuentas]
+    return data
 
-    return JsonResponse(data, safe=False)
+def obtener_cuentas_por_estudiante(request, estudiante_codigo):
+    """Vista para obtener las cuentas de un estudiante (requiere request)."""
+    estudiante = get_estudiante_por_codigo(estudiante_codigo)
+    
+    if estudiante is None:
+        return JsonResponse({"error": "Estudiante no encontrado"}, status=404)
+
+    cuentas = obtener_cuentas(estudiante_codigo)
+
+    return JsonResponse(cuentas, safe=False)
+
 
 def generar_reporte(request):
     """Genera el reporte de todos los estudiantes con sus cuentas, llamando directamente a la vista del manejador de pagos"""
