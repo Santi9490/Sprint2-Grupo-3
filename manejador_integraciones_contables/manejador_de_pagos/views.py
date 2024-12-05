@@ -41,7 +41,7 @@ def obtener_datos_estudiante(estudiante_id):
     """
     Realiza una solicitud al microservicio de estudiantes para obtener los datos del estudiante.
     """
-    url = f"{settings.PATH_ESTUDIANTES}/{estudiante_id}/"  # Asegúrate de configurar esta URL en settings.py
+    url = f"{settings.PATH_ESTUDIANTES}/{estudiante_id}/"  # URL base del microservicio
     try:
         response = requests.get(url, timeout=5)
         if response.status_code == 200:
@@ -53,17 +53,6 @@ def obtener_datos_estudiante(estudiante_id):
         return None
 
 
-
-def pago_list(request):
-    pagos = Pago.objects.all()
-    pagos_con_datos = []
-    for pago in pagos:
-        estudiante_datos = obtener_datos_estudiante(pago.estudiante)
-        pagos_con_datos.append({
-            'pago': pago,
-            'estudiante': estudiante_datos
-        })
-    return render(request, 'manejador_de_pagos/pago_list.html', {'pagos': pagos_con_datos})
     
 
 def pago_list(request):
@@ -84,7 +73,7 @@ def pago_list(request):
                 'estudiante': {'nombre': 'Desconocido', 'apellido': 'Desconocido', 'codigo': 'N/A'}
             })
 
-    return render(request, 'pagos/pago_list.html', {'pagos': pagos_con_datos})
+    return render(request, 'manejador_de_pagos/pago_list.html', {'pagos': pagos_con_datos})
 
    
 
@@ -158,18 +147,5 @@ def generar_reporte_pdf(request):
     
     return response
 
-def obtener_datos_estudiante(estudiante_id):
-    """
-    Realiza una solicitud al microservicio de estudiantes para obtener los datos del estudiante.
-    """
-    url = f"{settings.PATH_ESTUDIANTES}/{estudiante_id}/"  # URL base del microservicio
-    try:
-        response = requests.get(url, timeout=5)
-        if response.status_code == 200:
-            return response.json()  # Devuelve los datos como diccionario
-        else:
-            return None
-    except requests.RequestException as e:
-        print(f"Error al obtener datos del estudiante: {e}")
-        return None
+
 
