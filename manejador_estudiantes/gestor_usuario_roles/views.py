@@ -4,8 +4,6 @@ from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from pymongo import MongoClient
-from .forms import EstudianteForm
-from .models import Estudiante
 from django.contrib.auth.decorators import login_required
 from ofipensiones.auth0backend import getRole
 
