@@ -76,7 +76,7 @@ def generar_reporte(request):
     estudiantes = obtener_estudiantes()
 
     for estudiante in estudiantes:
-        estudiante["cuentas"] = obtener_cuentas_por_estudiante(estudiante["codigo"])
+        estudiante["cuentas"] = obtener_cuentas(estudiante["codigo"])
 
     
     reporte_cache = estudiantes
