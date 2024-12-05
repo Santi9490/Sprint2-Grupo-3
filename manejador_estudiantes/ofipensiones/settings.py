@@ -157,7 +157,7 @@ SOCIAL_AUTH_AUTH0_SCOPE = [
 ]
 
 AUTHENTICATION_BACKENDS = { 
-    'monitoring.auth0backend.Auth0', 
+    'ofipensiones.auth0backend.Auth0', 
     'django.contrib.auth.backends.ModelBackend', 
     }
 
