@@ -23,7 +23,6 @@ urlpatterns = [
     path('', include('gestor_usuario_roles.urls')),
     path(r'', include('django.contrib.auth.urls')),
     path(r'', include('social_django.urls')),
-
 ]
 
 
