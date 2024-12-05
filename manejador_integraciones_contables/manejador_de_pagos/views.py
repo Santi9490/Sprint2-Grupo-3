@@ -1,4 +1,5 @@
 # manejador_de_pagos/views.py
+import json
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
@@ -89,7 +90,7 @@ def generar_reporte_pdf(request):
     try:
         
         estudiantes_response = generar_reporte(request)
-        estudiantes = estudiantes_response.json()
+        estudiantes = json.loads(estudiantes_response.content)
     except Exception as e:
         print(f"Error al obtener el reporte de estudiantes: {e}")
         return HttpResponse("Error al obtener datos", status=500)

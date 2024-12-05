@@ -44,7 +44,7 @@ def get_estudiante_por_codigo(codigo):
 
 def obtener_cuentas(estudiante_codigo):
     """Obtiene las cuentas asociadas a un estudiante por su código."""
-    cuentas = Cuenta.objects.filter(estudiante=estudiante_codigo)  # Ajusta el filtro según tu modelo
+    cuentas = Cuenta.objects.filter(estudiante=estudiante_codigo)
     data = [{
         'id': cuenta.id,
         'descripcion': cuenta.descripcion,
