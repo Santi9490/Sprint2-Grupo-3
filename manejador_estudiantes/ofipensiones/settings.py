@@ -46,7 +46,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', 
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -73,23 +73,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 
 
-
-
-
-
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'estudiante_db',
-        'CLIENT': {
-            'host': 'mongodb://estudiante_user:isis2503@10.128.0.82:27017',
-        },
-    }
-}
-
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'monitoring_db',
+#       'USER': 'monitoring_user',
+#       'PASSWORD': 'isis2503',
+#       'HOST': '10.128.0.60',
+#       'PORT': '',
+#   }
+#}
 
 
 # Password validation
@@ -118,9 +114,10 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
+
 
 USE_TZ = True
 
@@ -130,26 +127,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# MongoDB Atlas Config
-MONGO_CLI = "mongodb://estudiante_user:isis2503@10.128.0.82:27017"
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-#DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.172.228.232:8080"
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    }
-}
-
+LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.134.195.180:8080"
 
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-2lbfseybkx5rveyk.us.auth0.com'
