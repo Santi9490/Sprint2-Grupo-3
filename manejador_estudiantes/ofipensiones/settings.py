@@ -80,12 +80,16 @@ WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'estudiante_db',
+        'CLIENT': {
+            'host': 'mongodb://estudiante_user:isis2503@10.128.0.82:27017',
+        },
+    }
+}
+
 
 
 # Password validation
@@ -138,6 +142,13 @@ MONGO_CLI = "mongodb://estudiante_user:isis2503@10.128.0.82:27017"
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.172.228.232:8080"
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
 
 
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes

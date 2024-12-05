@@ -42,5 +42,6 @@ def getRole(request):
     headers = {'authorization': 'Bearer ' + accessToken}
     resp = requests.get(url, headers=headers)
     userinfo = resp.json()
-    role = userinfo['dev-2lbfseybkx5rveyk.us.auth0.com/role']
-    return (role)
+    # Maneja si la clave 'role' no está presente
+    role = userinfo.get('dev-2lbfseybkx5rveyk.us.auth0.com/role', 'default_role')
+    return role
