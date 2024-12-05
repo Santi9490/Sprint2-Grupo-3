@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'social_django',
 ]
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
