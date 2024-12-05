@@ -83,5 +83,18 @@ def generar_reporte(request):
 
     return JsonResponse(estudiantes, safe=False)
     
+def actualizar_reporte_cache(request):
+    """Actualiza el reporte cacheado con los datos actuales del microservicio."""
+    global reporte_cache
+    reporte_cache = None
+
+    estudiantes = obtener_estudiantes()
+
+    for estudiante in estudiantes:
+        estudiante["cuentas"] = obtener_cuentas(estudiante["codigo"])
+
+    reporte_cache = estudiantes
+
+    return JsonResponse({"mensaje": "Reporte actualizado."})
 
     
