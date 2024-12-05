@@ -77,16 +77,19 @@ WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'monitoring_db',
-#       'USER': 'monitoring_user',
-#       'PASSWORD': 'isis2503',
-#       'HOST': '10.128.0.60',
-#       'PORT': '',
-#   }
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'estudiante_db',
+        'CLIENT': {
+            'host': 'mongodb://estudiante_user:isis2503@10.128.0.82:27017',  # Dirección de MongoDB
+            'username': 'estudiante_user',        # Usuario de MongoDB
+            'password': 'isis2503',               # Contraseña de MongoDB
+            'authSource': 'admin',                # Base de datos de autenticación
+        },
+    }
+}
+
 
 
 # Password validation
