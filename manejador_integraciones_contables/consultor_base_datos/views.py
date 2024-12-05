@@ -26,9 +26,21 @@ def get_estudiantes():
         return [] 
 
 def get_estudiante_por_codigo(codigo):
-    """Obtiene un estudiante por su código"""
-    estudiantes = get_estudiantes()
-    return next((estudiante for estudiante in estudiantes if estudiante['codigo'] == codigo), None)
+    """Consulta un estudiante específico por código en el microservicio."""
+    try:
+        url = f"{settings.PATH_ESTUDIANTES}/{codigo}/"
+        response = requests.get(url, headers={"Accept": "application/json"})
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            print(f"Estudiante con código {codigo} no encontrado.")
+            return None
+        else:
+            print(f"Error inesperado del microservicio: {response.status_code}")
+            return None
+    except requests.exceptions.RequestException as e:
+        print(f"Error al conectar con el microservicio: {e}")
+        return None
 
 def obtener_cuentas_por_estudiante(request, estudiante_codigo):
     estudiante = get_estudiante_por_codigo(estudiante_codigo)
