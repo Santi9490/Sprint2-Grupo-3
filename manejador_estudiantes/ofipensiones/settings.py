@@ -76,20 +76,16 @@ WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 
 
 
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'monitoring_db',
-        'CLIENT': {
-            'host': 'mongodb://estudiante_user:isis2503@10.128.0.82:27017',
-        },
-    }
-}
-
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 
 # Password validation
@@ -131,6 +127,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # MongoDB Atlas Config
+MONGO_CLI = "mongodb://estudiante_user:isis2503@10.128.0.82:27017"
 
 
 # Default primary key field type
