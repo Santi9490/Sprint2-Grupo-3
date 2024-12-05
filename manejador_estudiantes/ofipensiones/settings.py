@@ -113,10 +113,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = False
+USE_I18N = True
 
-USE_L10N = False
-
+USE_L10N = True
 
 USE_TZ = True
 
@@ -127,7 +126,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # MongoDB Atlas Config
-MONGO_CLI = os.environ.get('MONGO_CLIENT', 'mongodb://estudiante_user:isis2503@10.128.0.82:27017')
+MONGO_CLI = os.environ['MONGO_CLIENT']
 
 
 # Default primary key field type
