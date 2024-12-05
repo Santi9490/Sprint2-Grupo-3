@@ -1,7 +1,7 @@
 from django.db import models
 import requests
 
-from other import obtener_datos_estudiante
+from cuenta.other import obtener_datos_estudiante
 from ofipensiones import settings
 
 

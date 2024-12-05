@@ -7,7 +7,7 @@ import requests
 from cuenta.models import Cuenta
 from cuenta.forms import CuentaForm
 from ofipensiones import settings
-from other import obtener_datos_estudiante
+from cuenta.other import obtener_datos_estudiante
 
 def cuenta_list(request):
     cuentas = Cuenta.objects.all()
