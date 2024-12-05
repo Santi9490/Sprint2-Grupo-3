@@ -63,7 +63,7 @@ def pago_list(request):
             'pago': pago,
             'estudiante': estudiante_datos
         })
-    return render(request, 'pagos/pago_list.html', {'pagos': pagos_con_datos})
+    return render(request, 'manejador_de_pagos/pago_list.html', {'pagos': pagos_con_datos})
     
 
 def pago_list(request):
