@@ -143,6 +143,9 @@ LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.172.228.232:8080"
 
+SOCIAL_AUTH_USER_MODEL = 'auth.User'
+SOCIAL_AUTH_CLEAN_USERNAME = False
+SOCIAL_AUTH_FORCE_POST_DISCONNECT = True
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-2lbfseybkx5rveyk.us.auth0.com'
 SOCIAL_AUTH_AUTH0_KEY = 'njZmJ2HAK38PKXYcqZbIiLtepKx7i8k4'
