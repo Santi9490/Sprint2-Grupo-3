@@ -146,8 +146,8 @@ LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?retur
 
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-2lbfseybkx5rveyk.us.auth0.com'
-SOCIAL_AUTH_AUTH0_KEY = 'njZmJ2HAK38PKXYcqZbIiLtepKx7i8k4'
-SOCIAL_AUTH_AUTH0_SECRET = 'zolwqahkACKTmUVYasv3nFT6gH7HXk_urYBUwMEjX7AEvuJXeFgSgnVJAYdCk2lP'
+SOCIAL_AUTH_AUTH0_KEY = 'EpWAnWYTXBLt32lHT0eSLe0sKH0aKvfz'
+SOCIAL_AUTH_AUTH0_SECRET = 'wqrzQTFKdmKgJ_u0Yupwf75eh25EMSXWc5LueBzHuCheN8gVurfEQwpXChTKoT38'
 
 SOCIAL_AUTH_AUTH0_SCOPE = [
     'openid',
