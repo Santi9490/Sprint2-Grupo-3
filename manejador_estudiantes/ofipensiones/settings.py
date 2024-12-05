@@ -129,7 +129,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # MongoDB Atlas Config
-MONGO_CLI = os.environ['MONGO_CLIENT']
+MONGO_CLI = "mongodb://estudiante_user:isis2503@10.128.0.82:27017"
 
 
 # Default primary key field type
