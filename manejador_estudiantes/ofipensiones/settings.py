@@ -81,10 +81,14 @@ WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'djongo',
+        'NAME': 'monitoring_db',
+        'CLIENT': {
+            'host': 'mongodb://estudiante_user:isis2503@10.128.0.82:27017',
+        },
     }
 }
+
 
 
 
