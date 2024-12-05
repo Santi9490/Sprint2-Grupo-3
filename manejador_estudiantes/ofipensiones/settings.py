@@ -72,6 +72,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 
+MONGO_CLI = os.environ.get('MONGO_CLIENT', 'mongodb://estudiante_user:isis2503@10.128.0.82:27017')
+
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -134,7 +137,7 @@ MONGO_CLI = os.environ['MONGO_CLIENT']
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
