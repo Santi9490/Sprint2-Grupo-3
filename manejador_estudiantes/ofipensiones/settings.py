@@ -73,6 +73,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ofipensiones.wsgi.application'
 
 
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -114,9 +115,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = False
+USE_I18N = True
 
-USE_L10N = False
+USE_L10N = True
 
 
 USE_TZ = True
@@ -127,14 +128,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# MongoDB Atlas Config
+MONGO_CLI = os.environ['MONGO_CLIENT']
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.134.195.180:8080"
+LOGOUT_REDIRECT_URL = "https://dev-2lbfseybkx5rveyk.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F35.238.151.115:8080"
 
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-2lbfseybkx5rveyk.us.auth0.com'
