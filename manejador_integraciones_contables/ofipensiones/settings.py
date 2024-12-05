@@ -134,7 +134,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = ['http://34.68.172.142:8080/', 'http://34.68.172.142/']
+CSRF_TRUSTED_ORIGINS = ['http://10.128.0.85:8080/', 'http://34.68.172.142/']
 
 
 
