@@ -1,6 +1,3 @@
-import requests 
-from social_core.backends.oauth import BaseOAuth2 
-
 import requests
 from social_core.backends.oauth import BaseOAuth2
 
@@ -35,9 +32,6 @@ class Auth0(BaseOAuth2):
                 'first_name': userinfo['name'],
                 'picture': userinfo['picture'],
                 'user_id': userinfo['sub']}
-
-
-# Esta función está POR FUERA de la clase Auth0. Es una función independiente.
 
 # Esta función está POR FUERA de la clase Auth0. Es una función independiente.
 def getRole(request):
